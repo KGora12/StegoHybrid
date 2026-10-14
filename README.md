@@ -1,8 +1,8 @@
 # StegoHybrid
 
-StegoHybrid provides the code needed to run and evaluate a fully hybrid steganographic channel that combines the PHY and MAC layers of IEEE 802.11ax, implemented in ns-3 (version 3.44).
+This repository contains the code for StegoHybrid. It provides everything needed to run and evaluate a fully hybrid steganographic channel that combines the PHY and MAC layers of IEEE 802.11ax, implemented in ns-3 (version 3.44).
 
-The hybrid channel consists of two covert sub-channels:
+The hybrid channel consists of two main covert sub-channels:
 
 - **PHY sub-channel (Next-generation dirty constellation).** Secret bits are embedded by displacing selected QAM-16 symbols into an elliptical ring around their nominal constellation points. The receiver recovers them from symbols that fall outside an inner decision ellipse.
 - **MAC sub-channel (TXOP Duration utilization).** Secret bits are encoded in the TXOP duration utilization by building frames of specific lengths, alternating between the AC_VO and AC_VI access categories.
@@ -34,6 +34,8 @@ A controller decides in each step whether only the PHY sub-channel is used or wh
 
 Simulates QAM-16 steganography over 802.11ax (HE-MCS3, 20 MHz) for a given SNR and set of ellipse thresholds.
 
+
+Example usage:
 ```bash
 ./ns3 run "channel_s1 --snrDb=24"
 ```
@@ -51,20 +53,14 @@ Main parameters:
 
 Each run appends one row (`snr_db, qam_per, qam_ber, hidden_ber, e1, e2, e3`) to `data_s1.csv` and writes the constellation of the first packet to `all_constellation/<e1>_<e2>_<e3>/all_constellation_<snr>.csv`.
 
-An SNR sweep can be run with a simple loop:
-
-```bash
-for snr in $(seq 0 30); do
-  ./ns3 run "channel_s1 --snrDb=$snr"
-done
-```
 
 ### Scenarios 2–4: hybrid channel
 
 Simulates the hybrid PHY + MAC channel with optional background stations.
 
 ```bash
-# Adaptive TXOP Mode: a TXOP symbol is sent in a random 20% of the steps
+# Adaptive TXOP Mode: --pOne controls how often the TXOP sub-channel is used
+# (higher values = more frequent use, lower values = less frequent use)
 ./ns3 run "channel_s2_4 --pOne=0.2"
 
 # Only Physical Layer Mode: QAM steganography only
@@ -80,7 +76,7 @@ Main parameters:
 |-----------|-------------|---------|
 | `--random` | Random hybrid mode (1) or fixed cyclic pattern (0) | 1 |
 | `--pOne` | Random mode: probability of a QAM + TXOP step | 0.2 |
-| `--combo` | Cyclic pattern used when `random=0` (`0` = QAM, `1` = QAM + TXOP) | `00000` |
+| `--combo` | Cyclic pattern used when `random=0` (`0` = QAM, `1` = QAM + TXOP) | `0` |
 | `--snrDb` | QAM Es/N0 in dB | 26 |
 | `--stations` | Number of background stations | 0 |
 | `--bgRate` | Traffic rate per background station | 25Mbps |
