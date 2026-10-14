@@ -5,7 +5,7 @@ StegoHybrid provides the code needed to run and evaluate a fully hybrid steganog
 The hybrid channel consists of two covert sub-channels:
 
 - **PHY sub-channel (Next-generation dirty constellation).** Secret bits are embedded by displacing selected QAM-16 symbols into an elliptical ring around their nominal constellation points. The receiver recovers them from symbols that fall outside an inner decision ellipse.
-- **MAC sub-channel (TXOP).** Secret bits are encoded in the size of frames sent within EDCA transmission opportunities, alternating between the AC_VO and AC_VI access categories.
+- **MAC sub-channel (TXOP Duration utilization).** Secret bits are encoded in the TXOP duration utilization by building frames of specific lengths, alternating between the AC_VO and AC_VI access categories.
 
 A controller decides in each step whether only the PHY sub-channel is used or whether a TXOP symbol is sent as well.
 
@@ -28,28 +28,6 @@ A controller decides in each step whether only the PHY sub-channel is used or wh
 ├── LICENSE
 └── README.md
 ```
-
-The files in `ns3/src/wifi/model/` are **unmodified** copies of the ns-3.44 sources (EDCA/TXOP and YANS PHY/channel). They are included for reference only and do not need to be copied into your ns-3 tree. The covert channel is implemented entirely in the programs in `ns3/scratch/`, which configure the standard ns-3 Wi-Fi module through its public API.
-
-## Requirements
-
-- ns-3.44
-- A C++17 compiler (GCC or Clang) and CMake, as required by ns-3
-- Python 3 (optional, for processing the CSV results)
-
-## Installation
-
-1. Download and build ns-3.44 following the [official instructions](https://www.nsnam.org/docs/installation/html/).
-2. Copy the simulation programs into the `scratch/` directory of your ns-3 installation:
-   ```bash
-   cp ns3/scratch/*.cc /path/to/ns-3.44/scratch/
-   ```
-3. Build ns-3:
-   ```bash
-   cd /path/to/ns-3.44
-   ./ns3 build
-   ```
-
 ## Usage
 
 ### Scenario 1: PHY sub-channel
@@ -120,21 +98,3 @@ The `data/` directory contains the results used in the paper:
 
 - `scenario1/` contains the PHY sub-channel results: error rates as a function of SNR and the sent/received constellation points.
 - `scenario2/` – `scenario4/` contain the hybrid channel results for the three operating modes: *Only Physical Layer Mode*, *Adaptive TXOP Mode* and *TXOP Full-Usage Mode*.
-
-## Citation
-
-If you use this code in your research, please cite:
-
-```bibtex
-@article{stegohybrid,
-  author  = {TODO},
-  title   = {TODO},
-  journal = {Computer Communications},
-  year    = {TODO},
-  doi     = {TODO}
-}
-```
-
-## License
-
-This project is licensed under the GNU General Public License v2.0 (GPL-2.0-only), the same license as ns-3. See [LICENSE](LICENSE) for details.
